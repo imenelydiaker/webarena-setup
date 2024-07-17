@@ -8,10 +8,10 @@
 # postmill-populated-exposed-withimg.tar
 # gitlab-populated-final-port8023.tar
 
-docker load --input shopping_final_0712.tar
-docker load --input shopping_admin_final_0719.tar
-docker load --input postmill-populated-exposed-withimg.tar
-docker load --input gitlab-populated-final-port8023.tar
-docker load --input openstreetmap-website-db.tar.gz
-docker load --input openstreetmap-website-web.tar.gz
+docker load --input /datadrive/shopping_final_0712.tar
+docker load --input /datadrive/shopping_admin_final_0719.tar
+docker load --input /datadrive/postmill-populated-exposed-withimg.tar
+docker load --input /datadrive/gitlab-populated-final-port8023.tar
+docker load --input /datadrive/openstreetmap-website-db.tar.gz
+docker load --input /datadrive/openstreetmap-website-web.tar.gz
 
