@@ -34,3 +34,21 @@ docker exec gitlab gitlab-ctl reconfigure
 
 # maps
 docker exec openstreetmap-website-web-1 bin/rails db:migrate RAILS_ENV=development
+
+# reddit
+# forum - update rate limit to allow more requests
+echo "Updating forum rate limit"
+# in SubmissionData.php, we replace the max=3 to max=50, and 1 hour to 2 minutes, and 15 to 50, and 5 minutes to 2 minutes
+sudo docker exec reddit sed -i 's/1 hour/2 minutes/g' /var/www/html/src/DataObject/SubmissionData.php
+sudo docker exec reddit sed -i 's/5 minutes/2 minutes/g' /var/www/html/src/DataObject/SubmissionData.php
+sudo docker exec reddit sed -i 's/max=3/max=50/g' /var/www/html/src/DataObject/SubmissionData.php
+sudo docker exec reddit sed -i 's/max=15/max=50/g' /var/www/html/src/DataObject/SubmissionData.php
+# in CommentData.php, we replace the 5 minutes limit to 2 minutes, and max=10 to max=50
+sudo docker exec reddit sed -i 's/5 minutes/2 minutes/g' /var/www/html/src/DataObject/CommentData.php
+sudo docker exec reddit sed -i 's/max=10/max=50/g' /var/www/html/src/DataObject/CommentData.php
+# in UserData.php, we replace the max="3" to max="50", and 1 hour to 2 minutes
+sudo docker exec reddit sed -i 's/max="3"/max="50"/g' /var/www/html/src/DataObject/UserData.php
+sudo docker exec reddit sed -i 's/1 hour/2 minutes/g' /var/www/html/src/DataObject/UserData.php
+# reset cache to make sure the new rate limit is applied
+sudo docker exec -it reddit bash -lc 'php bin/console cache:clear --env=prod || rm -rf var/cache/prod'
+sudo docker exec -it reddit bash -lc 'php -r "function_exists(\"opcache_reset\") && opcache_reset(); echo \"OPcache reset\n\";"'
